@@ -14,6 +14,13 @@ buildscript {
     }
 }
 
+ext {
+    localProp = new Properties()
+    localProp.load(project.rootProject.file('local.properties').newDataInputStream())
+    publicKey = ext.localProp.getProperty('publicKey')
+    privateKey = ext.localProp.getProperty('privateKey')
+}
+
 allprojects {
     repositories {
         google()
