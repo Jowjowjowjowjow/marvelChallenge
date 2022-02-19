@@ -1,8 +1,8 @@
-package com.jonathan.santos.marvelchallenge.data
+package com.jonathan.santos.marvelchallenge.model
 
 import com.google.gson.annotations.SerializedName
 
-data class Serie(
+data class Comic(
     @SerializedName("name")
     val name: String
 )

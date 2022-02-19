@@ -15,7 +15,8 @@ class KoinInitializer: Application() {
             androidContext(this@KoinInitializer)
             modules(
                 listOf(
-                    networkModule
+                    networkModule,
+                    appModule
                 )
             )
         }

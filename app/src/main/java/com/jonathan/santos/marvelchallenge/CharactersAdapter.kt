@@ -1,18 +1,30 @@
 package com.jonathan.santos.marvelchallenge
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import com.jonathan.santos.marvelchallenge.databinding.CharactersItemBinding
+import com.jonathan.santos.marvelchallenge.model.Character
+import com.squareup.picasso.Callback
+import com.squareup.picasso.Picasso
+import org.koin.java.KoinJavaComponent
+import java.lang.Exception
 
 class CharactersAdapter() : RecyclerView.Adapter<CharactersAdapter.CharacterViewHolder>() {
 
-    var items: List<CharacterModel> = emptyList()
+    val picasso: Picasso by KoinJavaComponent.inject(Picasso::class.java)
+
+    var items: MutableList<Character> = mutableListOf()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
+
+    private var actualOffset = 0
+
+    private var loadNextItems: (Int) -> Unit = {}
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -23,21 +35,65 @@ class CharactersAdapter() : RecyclerView.Adapter<CharactersAdapter.CharacterView
     }
 
     override fun onBindViewHolder(holder: CharactersAdapter.CharacterViewHolder, position: Int) {
+        if(position >= itemCount - 1){
+            loadNextPage()
+        }
         holder.bind(items[position])
     }
 
     override fun getItemCount(): Int = items.size
 
+    fun setLoadNextItemsFunction(loadFunction: (Int) -> Unit) {
+        loadNextItems = loadFunction
+        loadNextPage()
+    }
+
+    fun mergeItemsList(list: List<Character>) {
+        items.addAll(list)
+        notifyDataSetChanged()
+    }
+
+    private fun loadNextPage(){
+        loadNextItems.invoke(actualOffset)
+        actualOffset += 20
+    }
+
     inner class CharacterViewHolder(private val binding: CharactersItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(character: CharacterModel) {
+        fun bind(character: Character) {
             with(binding) {
                 itemCharacterTitle.text = character.name
-                itemCharacterFavorite.setImageDrawable(AppCompatResources.getDrawable(binding.root.context, R.drawable.ic_favorite_star))
+                itemCharacterTitle.isSelected = true
+                itemCharacterFavorite.setImageDrawable(
+                    AppCompatResources.getDrawable(
+                        binding.root.context,
+                        R.drawable.ic_favorite_star
+                    )
+                )
                 itemCharacterFavorite.setOnClickListener {
                     itemCharacterFavorite.isSelected = !itemCharacterFavorite.isSelected
                 }
+                val pictureLink = "${character.thumbnail.path}.${character.thumbnail.extension}".replace(INSECURE_PROTOCOL, SECURE_PROTOCOL)
+                picasso
+                    .load(pictureLink)
+                    .resize(IMAGE_SIZE_PX, IMAGE_SIZE_PX)
+                    .centerCrop()
+                    .into(binding.imageViewCharacterPhoto, object : Callback{
+                        override fun onSuccess() {
+                            progressBar.visibility = View.GONE
+                        }
+
+                        override fun onError(e: Exception?) {
+                            progressBar.visibility = View.GONE
+                        }
+                    })
             }
         }
+    }
+
+    companion object {
+        const val IMAGE_SIZE_PX = 200
+        const val INSECURE_PROTOCOL = "http://"
+        const val SECURE_PROTOCOL = "https://"
     }
 }

@@ -5,20 +5,23 @@ import com.jonathan.santos.marvelchallenge.services.CharactersService
 import com.jonathan.santos.marvelchallenge.util.CalculateHash
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-const val baseURL = "http://gateway.marvel.com/v1/public/"
+const val baseURL = "https://gateway.marvel.com/v1/public/"
 val AUTH_INTERCEPTOR = named("AUTH_INTERCEPTOR")
 val API_CACHE = named("API_CACHE")
+val HTTP_LOGGING_QUALIFIER = named("HTTP_LOGGING_QUALIFIER")
 
 val networkModule = module {
 
     single<Retrofit> {
         Retrofit.Builder()
             .baseUrl(baseURL)
+            .client(get())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -27,11 +30,18 @@ val networkModule = module {
         val builder = OkHttpClient.Builder()
         builder.addInterceptor(get(AUTH_INTERCEPTOR))
         builder.addInterceptor(get(API_CACHE))
+        builder.addInterceptor(get(HTTP_LOGGING_QUALIFIER))
         builder.build()
     }
 
     single<CharactersService> {
         get<Retrofit>().create(CharactersService::class.java)
+    }
+
+    single<Interceptor>(HTTP_LOGGING_QUALIFIER) {
+        HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
     }
 
     single<Interceptor>(AUTH_INTERCEPTOR) {
@@ -40,19 +50,18 @@ val networkModule = module {
             val currentTimeStamp = System.currentTimeMillis().toString()
             val newUrl =
                 originalUrl.newBuilder().addQueryParameter(
-                    "hash",
-                    CalculateHash.calculateHash(
-                        currentTimeStamp,
-                        BuildConfig.PRIVATE_KEY,
-                        BuildConfig.PUBLIC_KEY
-                    )
-                ).addQueryParameter(
-                    "apiKey",
-                    BuildConfig.PUBLIC_KEY
-                ).addQueryParameter(
                     "ts",
                     currentTimeStamp
-                ).toString()
+                ).addQueryParameter(
+                    "apikey",
+                    BuildConfig.PUBLIC_KEY
+                ).addQueryParameter(
+            "hash",
+            CalculateHash.calculateHash(
+                currentTimeStamp,
+                BuildConfig.PRIVATE_KEY,
+                BuildConfig.PUBLIC_KEY
+            )).toString()
 
             chain.proceed(chain.request().newBuilder().url(newUrl).build())
         }

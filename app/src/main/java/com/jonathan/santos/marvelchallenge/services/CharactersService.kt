@@ -1,6 +1,6 @@
 package com.jonathan.santos.marvelchallenge.services
 
-import com.jonathan.santos.marvelchallenge.data.CharacterDataWrapper
+import com.jonathan.santos.marvelchallenge.model.CharacterDataWrapper
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
