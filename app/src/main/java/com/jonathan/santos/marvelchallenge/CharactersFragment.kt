@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.jonathan.santos.marvelchallenge.databinding.CharactersFragmentBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,20 +37,22 @@ class CharactersFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupRecyclerView()
+        setupCharactersAdapterNewList()
         subscribeGetDataFromApi()
         subscribeErrorWhenGettingInfoFromApi()
+        setupSwipeRefresh()
     }
 
     private fun setupRecyclerView() {
         binding.recyclerViewCharacters.apply {
-            val charactersAdapter = CharactersAdapter()
-            charactersAdapter.setLoadNextItemsFunction {
+            val characterAdapter = CharactersAdapter()
+            characterAdapter.setLoadNextItemsFunction {
                 lifecycleScope.launch(Dispatchers.Main) {
                     viewModel.getCharacters(it)
                 }
                 binding.progressBarLoadingMoreItems.visibility = View.VISIBLE
             }
-            adapter = charactersAdapter
+            adapter = characterAdapter
         }
     }
 
@@ -67,6 +70,21 @@ class CharactersFragment : Fragment() {
             Toast.makeText(context, "Erro ao buscar dados - ${it.message}", Toast.LENGTH_SHORT)
                 .show()
             binding.progressBarLoadingMoreItems.visibility = View.GONE
+        })
+    }
+
+    private fun setupSwipeRefresh(){
+        binding.pullToRefresh.setOnRefreshListener {
+            lifecycleScope.launch(Dispatchers.Main) {
+                viewModel.getCharacters()
+            }
+        }
+    }
+
+    private fun setupCharactersAdapterNewList(){
+        viewModel.charactersRepositoryNewResponseLiveData.observe(viewLifecycleOwner, {
+            binding.pullToRefresh.isRefreshing = false
+            (binding.recyclerViewCharacters.adapter as CharactersAdapter).refresh(it.results.toMutableList())
         })
     }
 }

@@ -6,5 +6,5 @@ import retrofit2.Response
 
 class CharactersRepository(private val charactersService: CharactersService) {
 
-    suspend fun getCharactersRepository(offset: Int?): Response<CharacterDataWrapper> = charactersService.getCharacters(offset)
+    suspend fun getCharactersRepository(offset: Int? = 0): Response<CharacterDataWrapper> = charactersService.getCharacters(offset)
 }

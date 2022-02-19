@@ -10,6 +10,9 @@ class CharactersViewModel(
     private val charactersRepository: CharactersRepository
 ) : ViewModel() {
 
+    private val _charactersRepositoryNewResponseLiveData = MutableLiveData<CharacterDataContainer>()
+    val charactersRepositoryNewResponseLiveData: LiveData<CharacterDataContainer> = _charactersRepositoryNewResponseLiveData
+
     private val _charactersRepositoryResponseLiveData = MutableLiveData<CharacterDataContainer>()
     val charactersRepositoryResponseLiveData: LiveData<CharacterDataContainer> =
         _charactersRepositoryResponseLiveData
@@ -18,10 +21,14 @@ class CharactersViewModel(
     val errorGettingCharactersRepositoryResponseLiveData: LiveData<Throwable> =
         _errorGettingCharactersRepositoryResponseLiveData
 
-    suspend fun getCharacters(offset: Int) {
+    suspend fun getCharacters(offset: Int? = 0) {
         val response = charactersRepository.getCharactersRepository(offset)
         if (response.isSuccessful) {
-            _charactersRepositoryResponseLiveData.postValue(response.body()?.data)
+            if(offset == 0){
+                _charactersRepositoryNewResponseLiveData.postValue(response.body()?.data)
+            } else {
+                _charactersRepositoryResponseLiveData.postValue(response.body()?.data)
+            }
         } else {
             _errorGettingCharactersRepositoryResponseLiveData.postValue(
                 Throwable(

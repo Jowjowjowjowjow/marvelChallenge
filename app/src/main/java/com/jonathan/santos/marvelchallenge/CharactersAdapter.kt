@@ -54,8 +54,14 @@ class CharactersAdapter() : RecyclerView.Adapter<CharactersAdapter.CharacterView
     }
 
     private fun loadNextPage(){
-        loadNextItems.invoke(actualOffset)
         actualOffset += 20
+        loadNextItems.invoke(actualOffset)
+    }
+
+    fun refresh(newList: MutableList<Character>){
+        actualOffset = 0
+        items = newList
+        notifyDataSetChanged()
     }
 
     inner class CharacterViewHolder(private val binding: CharactersItemBinding) :
