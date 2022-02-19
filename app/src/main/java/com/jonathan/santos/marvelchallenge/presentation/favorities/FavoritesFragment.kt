@@ -1,4 +1,4 @@
-package com.jonathan.santos.marvelchallenge
+package com.jonathan.santos.marvelchallenge.presentation.favorities
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -7,10 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.viewpager2.widget.ViewPager2
-import com.jonathan.santos.marvelchallenge.databinding.CharactersFragmentBinding
+import com.jonathan.santos.marvelchallenge.R
 import com.jonathan.santos.marvelchallenge.databinding.FavoritesFragmentBinding
-import com.jonathan.santos.marvelchallenge.presentation.CharactersAdapter
 
 class FavoritesFragment : Fragment() {
 

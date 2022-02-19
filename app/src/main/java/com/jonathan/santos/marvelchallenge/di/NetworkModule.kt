@@ -1,7 +1,7 @@
 package com.jonathan.santos.marvelchallenge.di
 
 import com.jonathan.santos.marvelchallenge.BuildConfig
-import com.jonathan.santos.marvelchallenge.services.CharactersService
+import com.jonathan.santos.marvelchallenge.data.services.CharactersService
 import com.jonathan.santos.marvelchallenge.util.CalculateHash
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient

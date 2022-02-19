@@ -1,7 +1,7 @@
-package com.jonathan.santos.marvelchallenge.repositories
+package com.jonathan.santos.marvelchallenge.data.repositories
 
 import com.jonathan.santos.marvelchallenge.model.CharacterDataWrapper
-import com.jonathan.santos.marvelchallenge.services.CharactersService
+import com.jonathan.santos.marvelchallenge.data.services.CharactersService
 import retrofit2.Response
 
 class CharactersRepository(private val charactersService: CharactersService) {

@@ -1,4 +1,4 @@
-package com.jonathan.santos.marvelchallenge
+package com.jonathan.santos.marvelchallenge.presentation.favorities
 
 import androidx.lifecycle.ViewModel
 

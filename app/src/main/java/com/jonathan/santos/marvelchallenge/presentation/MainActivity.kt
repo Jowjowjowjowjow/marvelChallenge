@@ -1,12 +1,18 @@
-package com.jonathan.santos.marvelchallenge
+package com.jonathan.santos.marvelchallenge.presentation
 
 import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayout
+import com.jonathan.santos.marvelchallenge.R
 import com.jonathan.santos.marvelchallenge.databinding.ActivityMainBinding
+import com.jonathan.santos.marvelchallenge.presentation.characters.CharactersFragment
+import com.jonathan.santos.marvelchallenge.presentation.favorities.FavoritesFragment
+import org.koin.android.ext.android.bind
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -54,6 +60,4 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .add(R.id.fragmentContainerView, CharactersFragment()).commit()
     }
-
-
 }

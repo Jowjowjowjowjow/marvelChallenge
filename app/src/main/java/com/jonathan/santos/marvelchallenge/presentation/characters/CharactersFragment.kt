@@ -1,4 +1,4 @@
-package com.jonathan.santos.marvelchallenge
+package com.jonathan.santos.marvelchallenge.presentation.characters
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,21 +8,22 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.jonathan.santos.marvelchallenge.R
 import com.jonathan.santos.marvelchallenge.databinding.CharactersFragmentBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CharactersFragment : Fragment() {
+class CharactersFragment() : Fragment() {
 
     lateinit var binding: CharactersFragmentBinding
 
-    companion object {
-        fun newInstance() = CharactersFragment()
-    }
-
     private val viewModel: CharactersViewModel by viewModel()
+
+    private var isRecyclerViewAsList: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +42,18 @@ class CharactersFragment : Fragment() {
         subscribeGetDataFromApi()
         subscribeErrorWhenGettingInfoFromApi()
         setupSwipeRefresh()
+        setupRecyclerViewLayoutButton()
+    }
+
+    private fun setupRecyclerViewLayoutButton(){
+        binding.button.setOnClickListener {
+            if(isRecyclerViewAsList) {
+                binding.recyclerViewCharacters.layoutManager = GridLayoutManager(context, 2)
+            } else {
+                binding.recyclerViewCharacters.layoutManager = LinearLayoutManager(context)
+            }
+            isRecyclerViewAsList = !isRecyclerViewAsList
+        }
     }
 
     private fun setupRecyclerView() {
@@ -57,12 +70,14 @@ class CharactersFragment : Fragment() {
     }
 
     private fun subscribeGetDataFromApi() {
-        viewModel.charactersRepositoryResponseLiveData.observe(viewLifecycleOwner, { charactersDataContainer ->
-            (binding.recyclerViewCharacters.adapter as CharactersAdapter).mergeItemsList(
-                charactersDataContainer.results
-            )
-            binding.progressBarLoadingMoreItems.visibility = View.GONE
-        })
+        viewModel.charactersRepositoryResponseLiveData.observe(
+            viewLifecycleOwner,
+            { charactersDataContainer ->
+                (binding.recyclerViewCharacters.adapter as CharactersAdapter).mergeItemsList(
+                    charactersDataContainer.results
+                )
+                binding.progressBarLoadingMoreItems.visibility = View.GONE
+            })
     }
 
     private fun subscribeErrorWhenGettingInfoFromApi() {
@@ -73,7 +88,7 @@ class CharactersFragment : Fragment() {
         })
     }
 
-    private fun setupSwipeRefresh(){
+    private fun setupSwipeRefresh() {
         binding.pullToRefresh.setOnRefreshListener {
             lifecycleScope.launch(Dispatchers.Main) {
                 viewModel.getCharacters()
@@ -81,7 +96,7 @@ class CharactersFragment : Fragment() {
         }
     }
 
-    private fun setupCharactersAdapterNewList(){
+    private fun setupCharactersAdapterNewList() {
         viewModel.charactersRepositoryNewResponseLiveData.observe(viewLifecycleOwner, {
             binding.pullToRefresh.isRefreshing = false
             (binding.recyclerViewCharacters.adapter as CharactersAdapter).refresh(it.results.toMutableList())

@@ -1,10 +1,11 @@
-package com.jonathan.santos.marvelchallenge
+package com.jonathan.santos.marvelchallenge.presentation.characters
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
+import com.jonathan.santos.marvelchallenge.R
 import com.jonathan.santos.marvelchallenge.databinding.CharactersItemBinding
 import com.jonathan.santos.marvelchallenge.model.Character
 import com.squareup.picasso.Callback
@@ -29,12 +30,12 @@ class CharactersAdapter() : RecyclerView.Adapter<CharactersAdapter.CharacterView
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): CharactersAdapter.CharacterViewHolder {
+    ): CharacterViewHolder {
         val view = CharactersItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CharacterViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: CharactersAdapter.CharacterViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
         if(position >= itemCount - 1){
             loadNextPage()
         }
@@ -79,7 +80,9 @@ class CharactersAdapter() : RecyclerView.Adapter<CharactersAdapter.CharacterView
                 itemCharacterFavorite.setOnClickListener {
                     itemCharacterFavorite.isSelected = !itemCharacterFavorite.isSelected
                 }
-                val pictureLink = "${character.thumbnail.path}.${character.thumbnail.extension}".replace(INSECURE_PROTOCOL, SECURE_PROTOCOL)
+                val pictureLink = "${character.thumbnail.path}.${character.thumbnail.extension}".replace(
+                    INSECURE_PROTOCOL, SECURE_PROTOCOL
+                )
                 picasso
                     .load(pictureLink)
                     .resize(IMAGE_SIZE_PX, IMAGE_SIZE_PX)

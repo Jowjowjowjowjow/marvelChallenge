@@ -1,10 +1,10 @@
-package com.jonathan.santos.marvelchallenge
+package com.jonathan.santos.marvelchallenge.presentation.characters
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.jonathan.santos.marvelchallenge.model.CharacterDataContainer
-import com.jonathan.santos.marvelchallenge.repositories.CharactersRepository
+import com.jonathan.santos.marvelchallenge.data.repositories.CharactersRepository
 
 class CharactersViewModel(
     private val charactersRepository: CharactersRepository
