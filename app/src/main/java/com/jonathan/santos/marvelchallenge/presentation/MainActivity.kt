@@ -30,9 +30,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupToolbar() {
-        binding.toolbar.title = binding.tabLayout.getTabAt(0)?.text
         binding.toolbar.setTitleTextColor(Color.WHITE)
         setSupportActionBar(binding.toolbar)
+        binding.title.text = binding.tabLayout.getTabAt(0)?.text
     }
 
     private fun setupTabLayout() {
@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
                             .replace(R.id.fragmentContainerView, FavoritesFragment()).commit()
                     }
                 }
-                binding.toolbar.title = tab?.text
+                binding.title.text = tab?.text
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -63,7 +63,6 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .add(R.id.fragmentContainerView, CharactersFragment()).commit()
     }
-
     private fun setupRecyclerViewLayoutButton() {
         binding.buttonRecyclerViewLayout.setOnClickListener {
             recyclerViewLayoutViewModel.getActualRecyclerViewLayout()
