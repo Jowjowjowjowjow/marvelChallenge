@@ -85,8 +85,7 @@ class CharactersAdapter() : RecyclerView.Adapter<CharactersAdapter.CharacterView
                     )
                 picasso
                     .load(pictureLink)
-                    .resize(IMAGE_SIZE_PX, IMAGE_SIZE_PX)
-                    .centerCrop()
+                    .resize(300, 300)
                     .into(binding.imageViewCharacterPhoto, object : Callback {
                         override fun onSuccess() {
                             progressBar.visibility = View.GONE

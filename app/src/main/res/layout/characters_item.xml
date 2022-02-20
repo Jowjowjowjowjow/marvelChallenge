@@ -44,19 +44,17 @@
                     android:id="@+id/itemCharacterTitle"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:gravity="center"
-                    android:layout_marginTop="8dp"
-                    android:singleLine="true"
                     android:ellipsize="marquee"
                     android:fadingEdge="horizontal"
+                    android:gravity="center"
                     android:marqueeRepeatLimit="marquee_forever"
                     android:scrollHorizontally="true"
+                    android:singleLine="true"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/itemCharacterFavorite"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/imageViewCharacterPhoto"
+                    app:layout_constraintStart_toStartOf="@+id/imageViewCharacterPhoto"
                     app:layout_constraintTop_toBottomOf="@+id/imageViewCharacterPhoto"
-                    tools:text="Characters 1" >
-                </TextView>
+                    tools:text="Characters 1"/>
 
                 <ImageButton
                     android:id="@+id/itemCharacterFavorite"
