@@ -101,7 +101,7 @@ class CharactersFragment() : Fragment() {
     }
 
     private fun setupCharactersAdapterNewList() {
-        viewModel.charactersRepositoryNewResponseLiveData.observe(viewLifecycleOwner, {
+        viewModel.charactersRepositoryFreshResponseLiveData.observe(viewLifecycleOwner, {
             binding.pullToRefresh.isRefreshing = false
             (binding.recyclerViewCharacters.adapter as CharactersAdapter).refresh(it.results.toMutableList())
         })
