@@ -11,7 +11,6 @@ import com.jonathan.santos.marvelchallenge.model.Character
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import org.koin.java.KoinJavaComponent
-import java.lang.Exception
 
 class CharactersAdapter() : RecyclerView.Adapter<CharactersAdapter.CharacterViewHolder>() {
 
@@ -36,7 +35,7 @@ class CharactersAdapter() : RecyclerView.Adapter<CharactersAdapter.CharacterView
     }
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
-        if(position >= itemCount - 1){
+        if (position >= itemCount - 1) {
             loadNextPage()
         }
         holder.bind(items[position])
@@ -54,12 +53,12 @@ class CharactersAdapter() : RecyclerView.Adapter<CharactersAdapter.CharacterView
         notifyDataSetChanged()
     }
 
-    private fun loadNextPage(){
+    private fun loadNextPage() {
         actualOffset += 20
         loadNextItems.invoke(actualOffset)
     }
 
-    fun refresh(newList: MutableList<Character>){
+    fun refresh(newList: MutableList<Character>) {
         actualOffset = 0
         items = newList
         notifyDataSetChanged()
@@ -80,14 +79,15 @@ class CharactersAdapter() : RecyclerView.Adapter<CharactersAdapter.CharacterView
                 itemCharacterFavorite.setOnClickListener {
                     itemCharacterFavorite.isSelected = !itemCharacterFavorite.isSelected
                 }
-                val pictureLink = "${character.thumbnail.path}.${character.thumbnail.extension}".replace(
-                    INSECURE_PROTOCOL, SECURE_PROTOCOL
-                )
+                val pictureLink =
+                    "${character.thumbnail.path}.${character.thumbnail.extension}".replace(
+                        INSECURE_PROTOCOL, SECURE_PROTOCOL
+                    )
                 picasso
                     .load(pictureLink)
                     .resize(IMAGE_SIZE_PX, IMAGE_SIZE_PX)
                     .centerCrop()
-                    .into(binding.imageViewCharacterPhoto, object : Callback{
+                    .into(binding.imageViewCharacterPhoto, object : Callback {
                         override fun onSuccess() {
                             progressBar.visibility = View.GONE
                         }

@@ -15,5 +15,4 @@ data class Character(
     val comicsContainer: ComicsContainer,
     @SerializedName("series")
     val seriesList: SeriesContainer
-
 )

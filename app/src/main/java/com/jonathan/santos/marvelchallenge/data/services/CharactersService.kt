@@ -7,5 +7,8 @@ import retrofit2.http.Query
 
 interface CharactersService {
     @GET("characters")
-    suspend fun getCharacters(@Query("offset") offset: Int? = 0, @Query("orderBy") orderBy: String? = "name"): Response<CharacterDataWrapper>
+    suspend fun getCharacters(
+        @Query("offset") offset: Int? = 0,
+        @Query("orderBy") orderBy: String? = "name"
+    ): Response<CharacterDataWrapper>
 }

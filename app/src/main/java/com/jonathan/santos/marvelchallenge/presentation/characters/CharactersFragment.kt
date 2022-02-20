@@ -10,11 +10,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.jonathan.santos.marvelchallenge.R
 import com.jonathan.santos.marvelchallenge.databinding.CharactersFragmentBinding
+import com.jonathan.santos.marvelchallenge.presentation.RecyclerViewLayoutEnum
+import com.jonathan.santos.marvelchallenge.presentation.RecyclerViewLayoutViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CharactersFragment() : Fragment() {
@@ -22,8 +24,7 @@ class CharactersFragment() : Fragment() {
     lateinit var binding: CharactersFragmentBinding
 
     private val viewModel: CharactersViewModel by viewModel()
-
-    private var isRecyclerViewAsList: Boolean = false
+    private val recyclerViewLayoutViewModel: RecyclerViewLayoutViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,19 +42,8 @@ class CharactersFragment() : Fragment() {
         setupCharactersAdapterNewList()
         subscribeGetDataFromApi()
         subscribeErrorWhenGettingInfoFromApi()
+        subscribeRecyclerViewLayout()
         setupSwipeRefresh()
-        setupRecyclerViewLayoutButton()
-    }
-
-    private fun setupRecyclerViewLayoutButton(){
-        binding.button.setOnClickListener {
-            if(isRecyclerViewAsList) {
-                binding.recyclerViewCharacters.layoutManager = GridLayoutManager(context, 2)
-            } else {
-                binding.recyclerViewCharacters.layoutManager = LinearLayoutManager(context)
-            }
-            isRecyclerViewAsList = !isRecyclerViewAsList
-        }
     }
 
     private fun setupRecyclerView() {
@@ -86,6 +76,20 @@ class CharactersFragment() : Fragment() {
                 .show()
             binding.progressBarLoadingMoreItems.visibility = View.GONE
         })
+    }
+
+    private fun subscribeRecyclerViewLayout() {
+        recyclerViewLayoutViewModel.recyclerViewLayoutLiveData.observe(viewLifecycleOwner,
+            { recyclerViewLayout ->
+                when (recyclerViewLayout) {
+                    RecyclerViewLayoutEnum.GRID_LAYOUT -> binding.recyclerViewCharacters.layoutManager =
+                        GridLayoutManager(context, 2)
+                    RecyclerViewLayoutEnum.LINEAR_LAYOUT -> binding.recyclerViewCharacters.layoutManager =
+                        LinearLayoutManager(context)
+                    else -> binding.recyclerViewCharacters.layoutManager =
+                        GridLayoutManager(context, 2)
+                }
+            })
     }
 
     private fun setupSwipeRefresh() {

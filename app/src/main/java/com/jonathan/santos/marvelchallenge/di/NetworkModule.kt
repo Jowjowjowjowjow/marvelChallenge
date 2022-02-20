@@ -56,12 +56,13 @@ val networkModule = module {
                     "apikey",
                     BuildConfig.PUBLIC_KEY
                 ).addQueryParameter(
-            "hash",
-            CalculateHash.calculateHash(
-                currentTimeStamp,
-                BuildConfig.PRIVATE_KEY,
-                BuildConfig.PUBLIC_KEY
-            )).toString()
+                    "hash",
+                    CalculateHash.calculateHash(
+                        currentTimeStamp,
+                        BuildConfig.PRIVATE_KEY,
+                        BuildConfig.PUBLIC_KEY
+                    )
+                ).toString()
 
             chain.proceed(chain.request().newBuilder().url(newUrl).build())
         }

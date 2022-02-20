@@ -5,17 +5,18 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayout
 import com.jonathan.santos.marvelchallenge.R
 import com.jonathan.santos.marvelchallenge.databinding.ActivityMainBinding
 import com.jonathan.santos.marvelchallenge.presentation.characters.CharactersFragment
 import com.jonathan.santos.marvelchallenge.presentation.favorities.FavoritesFragment
-import org.koin.android.ext.android.bind
+import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
+
+    private val recyclerViewLayoutViewModel by viewModel<RecyclerViewLayoutViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +25,8 @@ class MainActivity : AppCompatActivity() {
         setupToolbar()
         setupFirstFragment()
         setupTabLayout()
+        subscribeRecyclerViewLayout()
+        setupRecyclerViewLayoutButton()
     }
 
     private fun setupToolbar() {
@@ -60,4 +63,51 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .add(R.id.fragmentContainerView, CharactersFragment()).commit()
     }
+
+    private fun setupRecyclerViewLayoutButton() {
+        binding.buttonRecyclerViewLayout.setOnClickListener {
+            recyclerViewLayoutViewModel.getActualRecyclerViewLayout()
+        }
+    }
+
+    private fun subscribeRecyclerViewLayout() {
+        recyclerViewLayoutViewModel.recyclerViewLayoutLiveData.observe(this, { recyclerViewLayout ->
+            when (recyclerViewLayout) {
+                RecyclerViewLayoutEnum.GRID_LAYOUT -> {
+                    recyclerViewLayoutViewModel.updateActualRecyclerViewLayout(
+                        RecyclerViewLayoutEnum.LINEAR_LAYOUT
+                    )
+                    binding.buttonRecyclerViewLayout.setImageDrawable(
+                        AppCompatResources.getDrawable(
+                            this,
+                            R.drawable.ic_list
+                        )
+                    )
+                }
+                RecyclerViewLayoutEnum.LINEAR_LAYOUT -> {
+                    recyclerViewLayoutViewModel.updateActualRecyclerViewLayout(
+                        RecyclerViewLayoutEnum.GRID_LAYOUT
+                    )
+                    binding.buttonRecyclerViewLayout.setImageDrawable(
+                        AppCompatResources.getDrawable(
+                            this,
+                            R.drawable.ic_grid
+                        )
+                    )
+                }
+                else -> {
+                    recyclerViewLayoutViewModel.updateActualRecyclerViewLayout(
+                        RecyclerViewLayoutEnum.GRID_LAYOUT
+                    )
+                    binding.buttonRecyclerViewLayout.setImageDrawable(
+                        AppCompatResources.getDrawable(
+                            this,
+                            R.drawable.ic_grid
+                        )
+                    )
+                }
+            }
+        })
+    }
+
 }
