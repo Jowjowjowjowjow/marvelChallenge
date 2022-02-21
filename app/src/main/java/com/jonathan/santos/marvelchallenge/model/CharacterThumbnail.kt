@@ -1,6 +1,7 @@
 package com.jonathan.santos.marvelchallenge.model
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class CharacterThumbnail(
     @SerializedName("path")
@@ -8,4 +9,4 @@ data class CharacterThumbnail(
 
     @SerializedName("extension")
     val extension: String
-)
+): Serializable

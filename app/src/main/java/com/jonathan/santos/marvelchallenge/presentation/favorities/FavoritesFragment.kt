@@ -12,6 +12,9 @@ import com.jonathan.santos.marvelchallenge.databinding.FavoritesFragmentBinding
 
 class FavoritesFragment : Fragment() {
 
+    /*TODO: Montar um mapeamento do objeto Character no banco, escolher entre armazenar a imagem como blob ou apenas o path e também salvar a imagem localmente
+      Daria pra reaproveitar até o mesmo item de layout
+     */
     companion object {
         fun newInstance() = FavoritesFragment()
     }

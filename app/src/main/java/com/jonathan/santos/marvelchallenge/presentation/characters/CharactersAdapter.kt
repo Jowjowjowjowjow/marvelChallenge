@@ -1,5 +1,6 @@
 package com.jonathan.santos.marvelchallenge.presentation.characters
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,11 +9,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jonathan.santos.marvelchallenge.R
 import com.jonathan.santos.marvelchallenge.databinding.CharactersItemBinding
 import com.jonathan.santos.marvelchallenge.model.Character
+import com.jonathan.santos.marvelchallenge.presentation.charactersDetails.CharactersDetailsActivity
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import org.koin.java.KoinJavaComponent
 
 class CharactersAdapter() : RecyclerView.Adapter<CharactersAdapter.CharacterViewHolder>() {
+
+    /*TODO: Buscar cada personagem no banco através do id, se existir, preencher o ícone de favorito,
+       se não, deixar como é.
+    */
 
     val picasso: Picasso by KoinJavaComponent.inject(Picasso::class.java)
 
@@ -68,6 +74,11 @@ class CharactersAdapter() : RecyclerView.Adapter<CharactersAdapter.CharacterView
         RecyclerView.ViewHolder(binding.root) {
         fun bind(character: Character) {
             with(binding) {
+                characterCard.setOnClickListener {
+                    binding.root.context.startActivity(Intent(binding.root.context, CharactersDetailsActivity::class.java).apply {
+                        putExtra("Character", character)
+                    })
+                }
                 itemCharacterTitle.text = character.name
                 itemCharacterTitle.isSelected = true
                 itemCharacterFavorite.setImageDrawable(
@@ -85,7 +96,7 @@ class CharactersAdapter() : RecyclerView.Adapter<CharactersAdapter.CharacterView
                     )
                 picasso
                     .load(pictureLink)
-                    .resize(300, 300)
+                    .resize(IMAGE_SIZE_PX, IMAGE_SIZE_PX)
                     .into(binding.imageViewCharacterPhoto, object : Callback {
                         override fun onSuccess() {
                             progressBar.visibility = View.GONE
@@ -100,7 +111,7 @@ class CharactersAdapter() : RecyclerView.Adapter<CharactersAdapter.CharacterView
     }
 
     companion object {
-        const val IMAGE_SIZE_PX = 200
+        const val IMAGE_SIZE_PX = 300
         const val INSECURE_PROTOCOL = "http://"
         const val SECURE_PROTOCOL = "https://"
     }

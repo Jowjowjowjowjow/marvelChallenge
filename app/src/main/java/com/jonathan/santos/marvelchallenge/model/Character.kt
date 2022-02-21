@@ -1,6 +1,8 @@
 package com.jonathan.santos.marvelchallenge.model
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
+
 
 data class Character(
     @SerializedName("id")
@@ -15,4 +17,4 @@ data class Character(
     val comicsContainer: ComicsContainer,
     @SerializedName("series")
     val seriesList: SeriesContainer
-)
+): Serializable

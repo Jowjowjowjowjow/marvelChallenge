@@ -1,0 +1,6 @@
+package com.jonathan.santos.marvelchallenge.presentation.charactersDetails
+
+class ComicsAdapter {
+
+    /*TODO: Seguir o mesmo padrão de implementação do CharactersAdapter, até o item poderia ser reutilizado*/
+}
